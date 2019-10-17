@@ -20,23 +20,32 @@ https://brew.sh
 
 
 #### Learning Resources
+- [Typescript Lang](https://www.typescriptlang.org/)
+- [Jest](https://jestjs.io/)
+- [Bug Spelunking](https://kentcdodds.com/blog/spelunking-in-node-modules/)
 
 ### Installing
-
 #### To Install:
-
-#### Lets run this thing:
-
-## Deployment
-
-#### To deploy:
+- TODO: Update installation upon first deployment to NPM
 
 ## Roadmap
 
 #### Planned Features
-
+- Normalization
+  - Phone numbers
+  - URLs
+- Typeaheads
+  - Requests / Promises
+  - Prepends upon user inputs
+- Validation
+- Redux Support
 
 #### Monetization
+- TODO: Add paypal or donations
+
+#### Contributing
+- TODO: Automate testing for pull requests
+
 
 ## Authors
 |Commit Ranking|Author|Role|Git Link|
