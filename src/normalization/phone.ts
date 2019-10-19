@@ -30,11 +30,27 @@ export const testPhoneFormat = (
   unformattedDigits: string,
   options?: string
 ) => {
-  const split: string[] = phoneFormatString.match(phoneDigitCount);
+  const unformattedCharsOnly: string[] = phoneFormatString
+    .replace(/\W/g, "")
+    .split("");
   let currentIndex: number = 0;
   let nationalization: string = "";
   let areaCode: string = "";
   let digits: string = "";
+
+  // Digit case
+  if (unformattedCharsOnly.join("").length < unformattedDigits.length) {
+    unformattedDigits = unformattedDigits
+      .split("")
+      .slice(
+        unformattedDigits.length - unformattedCharsOnly.join("").length,
+        unformattedDigits.length
+      )
+      .join("");
+  }
+
+  const split: string[] = phoneFormatString.match(phoneDigitCount);
+
   const digitArray: string[] = unformattedDigits
     .split("")
     .map((digit) => digit.toString());
@@ -60,16 +76,21 @@ export const testPhoneFormat = (
     if (typeof slice === "undefined") {
       slice = "";
     }
+    // Slice only allows digits so call iteration
     let iteration: string = splitPhone.toString();
     const phoneStringLengthTest: string | string[] = splitPhone.match(
       testPhoneString
     );
     if (phoneStringLengthTest !== null) {
-      if (splitPhone.match(/([N])/g) && !nationalization) {
-        nationalization = slice;
+      if (splitPhone.match(/([N])/g)) {
+        nationalization = !nationalization
+          ? slice.toString()
+          : nationalization.toString() + slice.toString();
         iteration = slice;
-      } else if (splitPhone.match(/([A])/g) && !areaCode) {
-        areaCode = slice;
+      } else if (splitPhone.match(/([A])/g)) {
+        areaCode = !areaCode
+          ? slice.toString()
+          : areaCode.toString() + slice.toString();
         iteration = slice;
       } else if (splitPhone.match(/([D])/g)) {
         digits = !digits
@@ -108,13 +129,15 @@ export const testPhoneFormat = (
  * @param format
  * @returns onlyPhoneDigits: string
  */
-export const phone = (phoneNumber: string | number, format: string) => {
+export const phone = (phoneNumber: string | number, format: string, options?: string) => {
+  if (!options) {options = ""; }
   const onlyPhoneDigits: string = phoneNumber
     .toString()
     .replace(onlyDigits, "");
   const phoneFormat: IPhoneFormatMatch | string = testPhoneFormat(
     format,
-    onlyPhoneDigits
+    onlyPhoneDigits,
+    options
   );
   return phoneFormat;
 };
