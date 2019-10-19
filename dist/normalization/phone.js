@@ -22,11 +22,21 @@ const expressions_1 = require("../tools/expressions");
  * @returns {Object<IPhoneFormatMatch> | String}
  */
 exports.testPhoneFormat = (phoneFormatString, unformattedDigits, options) => {
-    const split = phoneFormatString.match(expressions_1.phoneDigitCount);
+    const unformattedCharsOnly = phoneFormatString
+        .replace(/\W/g, "")
+        .split("");
     let currentIndex = 0;
     let nationalization = "";
     let areaCode = "";
     let digits = "";
+    // Digit case
+    if (unformattedCharsOnly.join("").length < unformattedDigits.length) {
+        unformattedDigits = unformattedDigits
+            .split("")
+            .slice(unformattedDigits.length - unformattedCharsOnly.join("").length, unformattedDigits.length)
+            .join("");
+    }
+    const split = phoneFormatString.match(expressions_1.phoneDigitCount);
     const digitArray = unformattedDigits
         .split("")
         .map((digit) => digit.toString());
@@ -51,15 +61,20 @@ exports.testPhoneFormat = (phoneFormatString, unformattedDigits, options) => {
         if (typeof slice === "undefined") {
             slice = "";
         }
+        // Slice only allows digits so call iteration
         let iteration = splitPhone.toString();
         const phoneStringLengthTest = splitPhone.match(expressions_1.testPhoneString);
         if (phoneStringLengthTest !== null) {
-            if (splitPhone.match(/([N])/g) && !nationalization) {
-                nationalization = slice;
+            if (splitPhone.match(/([N])/g)) {
+                nationalization = !nationalization
+                    ? slice.toString()
+                    : nationalization.toString() + slice.toString();
                 iteration = slice;
             }
-            else if (splitPhone.match(/([A])/g) && !areaCode) {
-                areaCode = slice;
+            else if (splitPhone.match(/([A])/g)) {
+                areaCode = !areaCode
+                    ? slice.toString()
+                    : areaCode.toString() + slice.toString();
                 iteration = slice;
             }
             else if (splitPhone.match(/([D])/g)) {
@@ -95,11 +110,14 @@ exports.testPhoneFormat = (phoneFormatString, unformattedDigits, options) => {
  * @param format
  * @returns onlyPhoneDigits: string
  */
-exports.phone = (phoneNumber, format) => {
+exports.phone = (phoneNumber, format, options) => {
+    if (!options) {
+        options = "";
+    }
     const onlyPhoneDigits = phoneNumber
         .toString()
         .replace(expressions_1.onlyDigits, "");
-    const phoneFormat = exports.testPhoneFormat(format, onlyPhoneDigits);
+    const phoneFormat = exports.testPhoneFormat(format, onlyPhoneDigits, options);
     return phoneFormat;
 };
 //# sourceMappingURL=phone.js.map

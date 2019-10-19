@@ -71,7 +71,7 @@ test("Split text in the wrong order should not break the function", () => {
   });
 });
 
-test("Split digits should handle correctly with no area codes or nationalization", ()=>{
+test("Split digits should handle correctly with no area codes or nationalization", () => {
   expect(
     phone("1234567", "DDD-DDDD", "SPLIT_DIGITS")
   ).toStrictEqual({
@@ -79,8 +79,8 @@ test("Split digits should handle correctly with no area codes or nationalization
     digits: "1234567",
     nationalization: "",
     normalized: "123-4567"
-  })
-})
+  });
+});
 
 test("Should create formatted strings if you add it to the keys.", () => {
   expect(
@@ -90,5 +90,5 @@ test("Should create formatted strings if you add it to the keys.", () => {
     digits: "75309",
     nationalization: "8",
     normalized: "8 create +-0 6 7 000 something 5 new 3 today 0 boiyo 9"
-  })
-})
+  });
+});

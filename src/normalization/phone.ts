@@ -30,7 +30,7 @@ export const testPhoneFormat = (
   unformattedDigits: string,
   options?: string
 ) => {
-  let unformattedCharsOnly: string[] = phoneFormatString
+  const unformattedCharsOnly: string[] = phoneFormatString
     .replace(/\W/g, "")
     .split("");
   let currentIndex: number = 0;
@@ -53,7 +53,7 @@ export const testPhoneFormat = (
 
   const digitArray: string[] = unformattedDigits
     .split("")
-    .map(digit => digit.toString());
+    .map((digit) => digit.toString());
 
   if (split === null) {
     return {
@@ -65,7 +65,7 @@ export const testPhoneFormat = (
   }
   let final: boolean = false;
   let slice: string = "";
-  const normalizedArray: string[] = split.map(splitPhone => {
+  const normalizedArray: string[] = split.map((splitPhone) => {
     if (final) {
       return "";
     }
@@ -130,7 +130,7 @@ export const testPhoneFormat = (
  * @returns onlyPhoneDigits: string
  */
 export const phone = (phoneNumber: string | number, format: string, options?: string) => {
-  if(!options){options = ""};
+  if (!options) {options = ""; }
   const onlyPhoneDigits: string = phoneNumber
     .toString()
     .replace(onlyDigits, "");
