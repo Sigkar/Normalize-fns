@@ -82,12 +82,12 @@ export const testPhoneFormat = (
       testPhoneString
     );
     if (phoneStringLengthTest !== null) {
-      if (splitPhone.match(/([N])/g) && !nationalization) {
+      if (splitPhone.match(/([N])/g)) {
         nationalization = !nationalization
           ? slice.toString()
           : nationalization.toString() + slice.toString();
         iteration = slice;
-      } else if (splitPhone.match(/([A])/g) && !areaCode) {
+      } else if (splitPhone.match(/([A])/g)) {
         areaCode = !areaCode
           ? slice.toString()
           : areaCode.toString() + slice.toString();
@@ -129,13 +129,15 @@ export const testPhoneFormat = (
  * @param format
  * @returns onlyPhoneDigits: string
  */
-export const phone = (phoneNumber: string | number, format: string) => {
+export const phone = (phoneNumber: string | number, format: string, options?: string) => {
+  if(!options){options = ""};
   const onlyPhoneDigits: string = phoneNumber
     .toString()
     .replace(onlyDigits, "");
   const phoneFormat: IPhoneFormatMatch | string = testPhoneFormat(
     format,
-    onlyPhoneDigits
+    onlyPhoneDigits,
+    options
   );
   return phoneFormat;
 };
