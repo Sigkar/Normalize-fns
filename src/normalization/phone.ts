@@ -30,14 +30,30 @@ export const testPhoneFormat = (
   unformattedDigits: string,
   options?: string
 ) => {
-  const split: string[] = phoneFormatString.match(phoneDigitCount);
+  let unformattedCharsOnly: string[] = phoneFormatString
+    .replace(/\W/g, "")
+    .split("");
   let currentIndex: number = 0;
   let nationalization: string = "";
   let areaCode: string = "";
   let digits: string = "";
+
+  // Digit case
+  if (unformattedCharsOnly.join("").length < unformattedDigits.length) {
+    unformattedDigits = unformattedDigits
+      .split("")
+      .slice(
+        unformattedDigits.length - unformattedCharsOnly.join("").length,
+        unformattedDigits.length
+      )
+      .join("");
+  }
+
+  const split: string[] = phoneFormatString.match(phoneDigitCount);
+
   const digitArray: string[] = unformattedDigits
     .split("")
-    .map((digit) => digit.toString());
+    .map(digit => digit.toString());
 
   if (split === null) {
     return {
@@ -49,7 +65,7 @@ export const testPhoneFormat = (
   }
   let final: boolean = false;
   let slice: string = "";
-  const normalizedArray: string[] = split.map((splitPhone) => {
+  const normalizedArray: string[] = split.map(splitPhone => {
     if (final) {
       return "";
     }
@@ -60,16 +76,21 @@ export const testPhoneFormat = (
     if (typeof slice === "undefined") {
       slice = "";
     }
+    // Slice only allows digits so call iteration
     let iteration: string = splitPhone.toString();
     const phoneStringLengthTest: string | string[] = splitPhone.match(
       testPhoneString
     );
     if (phoneStringLengthTest !== null) {
       if (splitPhone.match(/([N])/g) && !nationalization) {
-        nationalization = slice;
+        nationalization = !nationalization
+          ? slice.toString()
+          : nationalization.toString() + slice.toString();
         iteration = slice;
       } else if (splitPhone.match(/([A])/g) && !areaCode) {
-        areaCode = slice;
+        areaCode = !areaCode
+          ? slice.toString()
+          : areaCode.toString() + slice.toString();
         iteration = slice;
       } else if (splitPhone.match(/([D])/g)) {
         digits = !digits
