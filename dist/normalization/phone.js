@@ -41,6 +41,9 @@ exports.testPhoneFormat = (phoneFormatString, unformattedDigits, options) => {
     let final = false;
     let slice = "";
     const normalizedArray = split.map((splitPhone) => {
+        if (final) {
+            return "";
+        }
         slice = digitArray
             .slice(currentIndex, currentIndex + splitPhone.length)
             .join("")
@@ -66,10 +69,6 @@ exports.testPhoneFormat = (phoneFormatString, unformattedDigits, options) => {
                 iteration = slice;
             }
             currentIndex = currentIndex + splitPhone.length;
-        }
-        if (final) {
-            // TODO: Break a for-loop instead of map
-            return "";
         }
         if ((digits + areaCode + nationalization).toString().length ===
             unformattedDigits.length) {
